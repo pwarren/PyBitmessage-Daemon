@@ -524,6 +524,64 @@ def listSubscriptions():
     print ' '
 
 
+def createChan():
+    global usrPrompt
+    password = userInput("Enter channel name")
+    password = password.encode('base64')
+    try:
+        print api.createChan(password)
+    except:
+        print '\n     Connection Error\n'
+        usrPrompt = 0
+        main()
+
+
+def joinChan():
+    global usrPrompt
+    while True:
+        address = userInput("Enter channel address")
+        
+        if (address == "c"):
+                usrPrompt = 1
+                print ' '
+                main()
+        elif (decodeAddress(address)== False):
+            print '\n     Invalid. "c" to cancel. Please try again.\n'
+        else:
+            break
+    
+    password = userInput("Enter channel name")
+    password = password.encode('base64')
+    try:
+        print api.joinChan(password,address)
+    except:
+        print '\n     Connection Error\n'
+        usrPrompt = 0
+        main()
+
+def leaveChan():
+    global usrPrompt
+    while True:
+        address = userInput("Enter channel address")
+        
+        if (address == "c"):
+                usrPrompt = 1
+                print ' '
+                main()
+        elif (decodeAddress(address)== False):
+            print '\n     Invalid. "c" to cancel. Please try again.\n'
+        else:
+            break
+    
+    try:
+        print api.leaveChan(address)
+    except:
+        print '\n     Connection Error\n'
+        usrPrompt = 0
+        main()
+
+
+
 def listAdd(): #Lists all of the addresses and their info
     global usrPrompt
     try:
@@ -1143,6 +1201,10 @@ def UI(usrInput): #Main user menu
 	print '     | unsubscribe     | Unsubscribes from an address                 |'
 	#print '     | listSubscriptions | Lists all of the subscriptions.              |'
 	print '     |-----------------|----------------------------------------------|'
+	print '     | create          | Creates a channel                            |'
+        print '     | join            | Joins a channel                              |'
+        print '     | leave           | Leaves a channel                             |'
+	print '     |-----------------|----------------------------------------------|'
 	print '     | inbox           | Lists the message information for the inbox  |'
 	print '     | outbox          | Lists the message information for the outbox |'
 	print '     | send            | Send a new message or broadcast              |'
@@ -1243,6 +1305,19 @@ def UI(usrInput): #Main user menu
     elif usrInput == "listsubscriptions": #Unsubscribe from an address
         listSubscriptions()
         usrPrompt = 1
+        main()
+
+    elif usrInput == "create":
+        createChan()
+        userPrompt = 1
+        main()
+    elif usrInput == "join":
+        joinChan()
+        userPrompt = 1
+        main()
+    elif usrInput == "leave":
+        leaveChan()
+        userPrompt = 1
         main()
         
     elif usrInput == "inbox":
